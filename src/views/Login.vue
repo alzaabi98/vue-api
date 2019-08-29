@@ -7,16 +7,22 @@
         <form action="#">
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="text" name="email" id="email" class="form-control" />
+            <input type="text" name="email" id="email" v-model="email" class="form-control" />
           </div>
 
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" name="password" id="password" class="form-control" />
+            <input
+              type="password"
+              name="password"
+              id="password"
+              v-model="password"
+              class="form-control"
+            />
           </div>
 
           <div class="form-group">
-            <button type="submit" class="btn btn-info btn-block">Login</button>
+            <button type="submit" class="btn btn-info btn-block" @click.prevent="performLogin">Login</button>
           </div>
         </form>
       </div>
@@ -25,7 +31,21 @@
 </template>
 
 <script>
-export default {};
+export default {
+  name: "login",
+  data() {
+    return {
+      email: "",
+      password: ""
+    };
+  },
+  methods: {
+    performLogin() {
+      console.log("perfom login");
+      //this.$router.push("/profile");
+    }
+  }
+};
 </script>
 
 <style>
