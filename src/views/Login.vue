@@ -19,6 +19,7 @@
               v-model="password"
               class="form-control"
             />
+            <div style="color:red;" v-if="error">{{ error }}</div>
           </div>
 
           <div class="form-group">
@@ -31,18 +32,36 @@
 </template>
 
 <script>
+import axios from "axios";
+
 export default {
   name: "login",
   data() {
     return {
       email: "",
-      password: ""
+      password: "",
+      error: ""
     };
   },
   methods: {
     performLogin() {
+      axios
+        .post("http://localhost:8000/api/auth/login", {
+          email: this.email,
+          password: this.password
+        })
+        .then(res => {
+          console.log(res.data);
+          // store the token and user in localstorage
+          const token = localStorage.setItem("token", res.data.access_token);
+          const user = localStorage.setItem("user", res.data.user);
+          this.$router.push("/profile");
+        })
+        .catch(err => {
+          console.log(err.message);
+          this.error = err.message;
+        });
       console.log("perfom login");
-      //this.$router.push("/profile");
     }
   }
 };
