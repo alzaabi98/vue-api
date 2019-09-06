@@ -39,6 +39,7 @@
 </template>
 
 <script>
+import axios from 'axios'
 export default {
   name: "register",
   data() {
@@ -50,8 +51,21 @@ export default {
   },
   methods: {
     performRegister() {
-      console.log("perform register");
-      this.$router.push("/profile");
+      //console.log("perform register");
+      //
+      axios.post('http://localhost:8000/api/auth/register',{
+        name: this.name,
+        email: this.email,
+        password: this.password
+      })
+      .then( res => {
+          const token = localStorage.setItem("token", res.data.access_token);
+          const user = localStorage.setItem("user", res.data.user);
+          this.$router.push("/profile");
+      })
+      .catch( err => {
+        console.log(err.message)
+      })
     }
   }
 };
