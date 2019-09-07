@@ -7,7 +7,7 @@ import Profile from "./views/Profile";
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: "history",
   base: process.env.BASE_URL,
   routes: [
@@ -19,17 +19,53 @@ export default new Router({
     {
       path: "/login",
       name: "login",
-      component: Login
+      component: Login,
+      meta: {
+        guest: true
+      }
     },
     {
       path: "/register",
       name: "register",
-      component: Register
+      component: Register,
+      meta: {
+        guest: true
+      }
     },
     {
       path: "/profile",
       name: "profile",
-      component: Profile
+      component: Profile,
+      meta: {
+        secure: true
+      }
     }
   ]
 });
+
+router.beforeEach((to, from, next) => {
+  if (to.matched.some(record => record.meta.secure)) {
+    // if no token
+    if (localStorage.getItem("token") == null) {
+      console.log("no token");
+      next({
+        path: "/login"
+      });
+    } else {
+      next();
+    }
+  } else if (to.matched.some(record => record.meta.guest)) {
+    if (localStorage.getItem("token") == null) {
+      next();
+    } else {
+      console.log("no token");
+      next({
+        path: "/profile"
+      });
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
