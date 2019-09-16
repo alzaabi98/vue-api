@@ -43,7 +43,6 @@ export default {
   },
   mounted() {
     this.checkUserStatus();
-    s;
   },
   computed: {
     loggedIn() {
