@@ -14,10 +14,10 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ml-auto">
-        <li class="nav-item">
+        <li class="nav-item" v-if="!loggedIn">
           <router-link class="btn btn-primary my-1 btn-block" to="/login">Login</router-link>
         </li>
-        <li class="nav-item">
+        <li class="nav-item" v-if="!loggedIn">
           <router-link
             class="btn btn-success my-1 ml-1 btn-block"
             to="/register"
@@ -25,7 +25,43 @@
             aria-disabled="true"
           >Register</router-link>
         </li>
+
+        <li class="nav-item" v-if="loggedIn">
+          <button class="btn btn-warning" @click.prevent="performLogout">Logout</button>
+        </li>
       </ul>
     </div>
   </nav>
 </template>
+
+<script>
+export default {
+  data() {
+    return {
+      token: null
+    };
+  },
+  mounted() {
+    this.checkUserStatus();
+    s;
+  },
+  computed: {
+    loggedIn() {
+      return this.$store.getters.get_loggedIn;
+    }
+  },
+  methods: {
+    checkUserStatus() {
+      if (localStorage.getItem("token") != null) {
+        this.token = localStorage.getItem("token");
+      }
+    },
+    performLogout() {
+      localStorage.removeItem("token");
+      localStorage.removeItem("user");
+      this.token = null;
+      this.$router.push("/login");
+    }
+  }
+};
+</script>

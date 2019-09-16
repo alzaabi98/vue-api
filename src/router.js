@@ -5,6 +5,7 @@ import Login from "./views/Login";
 import Register from "./views/Register";
 import Profile from "./views/Profile";
 
+import store from "./store";
 Vue.use(Router);
 
 const router = new Router({
@@ -46,8 +47,8 @@ const router = new Router({
 router.beforeEach((to, from, next) => {
   if (to.matched.some(record => record.meta.secure)) {
     // if no token
-    if (localStorage.getItem("token") == null) {
-      console.log("no token");
+    if (!store.state.loggedIn) {
+      //console.log("no token");
       next({
         path: "/login"
       });
@@ -55,10 +56,10 @@ router.beforeEach((to, from, next) => {
       next();
     }
   } else if (to.matched.some(record => record.meta.guest)) {
-    if (localStorage.getItem("token") == null) {
+    if (!store.state.loggedIn) {
       next();
     } else {
-      console.log("no token");
+      //console.log("no token");
       next({
         path: "/profile"
       });
