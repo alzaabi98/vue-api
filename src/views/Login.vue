@@ -26,6 +26,8 @@
             <button type="submit" class="btn btn-info btn-block" @click.prevent="performLogin">Login</button>
           </div>
         </form>
+
+        <circle-spin v-show="isLoading"></circle-spin>
       </div>
     </div>
   </div>
@@ -58,6 +60,7 @@ export default {
           this.$router.push("/profile");
         })
         .catch(err => {
+          this.isLoading = false;
           this.error = " There was error during login process";
           console.log(err.message);
         });
