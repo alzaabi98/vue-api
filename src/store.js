@@ -58,6 +58,24 @@ export default new Vuex.Store({
             reject(err);
           });
       });
+    },
+    performLogoutAction({ commit, state }) {
+      return new Promise((resolve, reject) => {
+        axios
+          .post("http://localhost:8000/api/auth/logout", {
+            token: state.token
+          })
+
+          .then(res => {
+            commit("SET_token", null);
+            commit("SET_user", null);
+            commit("SET_loggedIn", false);
+            resolve(res);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     }
   },
   getters: {

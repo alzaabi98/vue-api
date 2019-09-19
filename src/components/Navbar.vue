@@ -56,10 +56,14 @@ export default {
       }
     },
     performLogout() {
-      localStorage.removeItem("token");
-      localStorage.removeItem("user");
-      this.token = null;
-      this.$router.push("/login");
+      this.$store
+        .dispatch("performLogoutAction")
+        .then(res => {
+          this.$router.push("/login");
+        })
+        .catch(err => {
+          console.log(err);
+        });
     }
   }
 };
