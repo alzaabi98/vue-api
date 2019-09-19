@@ -23,6 +23,7 @@
               v-model="password"
               class="form-control"
             />
+            <div style="color:red;" v-if="error">{{ error }}</div>
           </div>
 
           <div class="form-group">
@@ -33,39 +34,44 @@
             >Register</button>
           </div>
         </form>
+        <circle-spin v-show="isLoading"></circle-spin>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from "axios";
 export default {
   name: "register",
   data() {
     return {
       name: "",
       email: "",
-      password: ""
+      password: "",
+      error: "",
+      isLoading: false
     };
   },
   methods: {
     performRegister() {
-      //console.log("perform register");
-      //
-      axios.post('http://localhost:8000/api/auth/register',{
-        name: this.name,
-        email: this.email,
-        password: this.password
-      })
-      .then( res => {
-          const token = localStorage.setItem("token", res.data.access_token);
-          const user = localStorage.setItem("user", res.data.user);
+      this.isLoading = true;
+      this.$store
+        .dispatch("performRegisterAction", {
+          name: this.name,
+          email: this.email,
+          password: this.password
+        })
+        .then(res => {
+          this.isLoading = false;
+
           this.$router.push("/profile");
-      })
-      .catch( err => {
-        console.log(err.message)
-      })
+        })
+        .catch(err => {
+          this.isLoading = false;
+          this.error = " There was error during Registration process";
+          console.log(err.message);
+        });
     }
   }
 };
