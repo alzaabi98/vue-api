@@ -1,5 +1,6 @@
 import Vue from "vue";
 import Vuex from "vuex";
+import VuexPersistence from "vuex-persist";
 
 Vue.use(Vuex);
 import axios from "axios";
@@ -10,6 +11,7 @@ export default new Vuex.Store({
     user: null,
     token: null
   },
+  plugins: [new VuexPersistence().plugin],
   mutations: {
     SET_user(state, payload) {
       state.user = payload;
@@ -68,8 +70,9 @@ export default new Vuex.Store({
 
           .then(res => {
             commit("SET_token", null);
-            commit("SET_user", null);
+
             commit("SET_loggedIn", false);
+            commit("SET_user", null);
             resolve(res);
           })
           .catch(err => {
