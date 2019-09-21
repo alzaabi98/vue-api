@@ -76,11 +76,33 @@ export default new Vuex.Store({
             reject(err);
           });
       });
+    },
+
+    updateUserProfileAction({ commit, state }, payload) {
+      return new Promise((resolve, reject) => {
+        axios
+          .patch("http://localhost:8000/api/auth/update", {
+            name: payload.name,
+            email: payload.email,
+            token: state.token
+          })
+          .then(res => {
+            commit("SET_user", res.data.user);
+
+            resolve(res);
+          })
+          .catch(err => {
+            reject(err);
+          });
+      });
     }
   },
   getters: {
     get_loggedIn(state) {
       return state.loggedIn;
+    },
+    get_user(state) {
+      return state.user;
     }
   }
 });
